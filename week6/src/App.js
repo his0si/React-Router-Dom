@@ -16,9 +16,7 @@ import {
 function UseSearchParamsExample() {
   // useSearchParams 훅으로 쿼리 파라미터 관리
   const [searchParams, setSearchParams] = useSearchParams();
-  // 'name'과 'age'라는 쿼리 파라미터 값 추출
-  const nameParam = searchParams.get('name');
-  const ageParam = searchParams.get('age');
+  // TOCO: 'name'과 'age'라는 쿼리 파라미터 값 추출
 
   return (
     <div>
@@ -31,8 +29,7 @@ function UseSearchParamsExample() {
       </p>
       <button
         onClick={() => {
-          // 기존 쿼리 파라미터를 업데이트: name을 'Alice', age를 '30'으로 설정
-          setSearchParams({ name: 'Alice', age: '30' });
+          // TODO: 기존 쿼리 파라미터를 업데이트: name을 'Alice', age를 '30'으로 설정
         }}
       >
         Change Query Parameter to Alice &amp; Age 30
@@ -96,10 +93,8 @@ function QueryParamsWithNavigateExample() {
     // 기존 쿼리 파라미터들을 복사하여 새로운 URLSearchParams 객체 생성
     const newParams = new URLSearchParams(location.search);
     
-    // [실습] 아래 값을 원하는 값으로 수정해보세요.
+    // TODO: 아래 값을 원하는 값으로 수정해보세요.
     // 예시: category 값을 'books'로, sort 값을 'desc'로 업데이트
-    newParams.set('category', 'books');
-    newParams.set('sort', 'desc');
     
     // 업데이트된 쿼리 문자열로 현재 경로를 변경 (SPA 방식, 전체 리로드 X)
     navigate(`${location.pathname}?${newParams.toString()}`);
