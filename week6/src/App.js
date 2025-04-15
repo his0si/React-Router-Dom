@@ -1,12 +1,24 @@
+// App.js
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link, useSearchParams, useLocation, useNavigate } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useSearchParams,
+  useLocation,
+  useNavigate
+} from 'react-router-dom';
 
-// useSearchParams를 활용한 예제 컴포넌트
+/* ---------------------------------------------------------
+   useSearchParams를 활용한 예제 컴포넌트
+--------------------------------------------------------- */
 function UseSearchParamsExample() {
   // useSearchParams 훅으로 쿼리 파라미터 관리
   const [searchParams, setSearchParams] = useSearchParams();
-  // TODO: 'name'이라는 쿼리 파라미터 값 추출
-  // TODO: 'age'라는 파라미터도 함께 처리
+  // 'name'과 'age'라는 쿼리 파라미터 값 추출
+  const nameParam = searchParams.get('name');
+  const ageParam = searchParams.get('age');
 
   return (
     <div>
@@ -19,7 +31,7 @@ function UseSearchParamsExample() {
       </p>
       <button
         onClick={() => {
-          // 기존 쿼리 파라미터를 업데이트 - name 값을 'Alice'로 변경하고, age 값을 '30'으로 추가함
+          // 기존 쿼리 파라미터를 업데이트: name을 'Alice', age를 '30'으로 설정
           setSearchParams({ name: 'Alice', age: '30' });
         }}
       >
@@ -27,8 +39,10 @@ function UseSearchParamsExample() {
       </button>
       <button
         onClick={() => {
-          // TODO: 기존 파라미터에 새로운 파라미터(ref)를 추가
-          // 기존 파라미터에 ref 값을 'homepage'로 추가하여 업데이트
+          // 기존 파라미터를 객체로 변환한 뒤, 새로운 파라미터(ref)를 추가
+          const newParams = Object.fromEntries([...searchParams]);
+          newParams.ref = 'homepage';
+          setSearchParams(newParams);
         }}
       >
         Add ref=homepage
@@ -37,14 +51,16 @@ function UseSearchParamsExample() {
   );
 }
 
-// window.location을 활용한 예제 컴포넌트
+/* ---------------------------------------------------------
+   window.location을 활용한 예제 컴포넌트
+--------------------------------------------------------- */
 function WindowLocationExample() {
-  // window.location.search로 현재 URL의 쿼리 문자열 추출
+  // 현재 URL의 쿼리 문자열 추출
   const searchString = window.location.search;
-  // URLSearchParams를 활용하여 필요한 파라미터를 추출하는 코드 작성
+  // URLSearchParams를 활용하여 파라미터 파싱
   const params = new URLSearchParams(searchString);
   const idParam = params.get('id');
-  // TODO: 'ref'라는 파라미터도 추출하여 사용
+  const refParam = params.get('ref');
 
   return (
     <div>
@@ -60,51 +76,32 @@ function WindowLocationExample() {
   );
 }
 
-
-// 홈 컴포넌트 - 내비게이션 링크 제공
-function Home() {
-  return (
-    <div>
-      <h1>React Router &amp; window.location 활용 예제</h1>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/searchparams?name=John">useSearchParams Example</Link>
-          </li>
-          <li>
-            <Link to="/windowlocation?id=123&ref=example">window.location Example</Link>
-          </li>
-          <li>
-            <Link to="/navigate-example?category=all&sort=asc">QueryParamsWithNavigateExample</Link>
-          </li>
-        </ul>
-      </nav>
-      <p>
-        이 예제는 React Router의 useSearchParams와 window.location을 사용하여 URL 쿼리 파라미터를 어떻게 읽고, 업데이트하는지 보여줍니다.
-      </p>
-    </div>
-  );
-}
-
-// <QueryParamsWithNavigateExample> 컴포넌트: 
-// useLocation과 useNavigate를 활용하여 URL의 쿼리 파라미터를 읽고 업데이트하는 새로운 예제입니다.
+/* ---------------------------------------------------------
+   QueryParamsWithNavigateExample 컴포넌트
+   - useLocation과 useNavigate를 사용해 URL의 쿼리 파라미터를 읽고 업데이트
+--------------------------------------------------------- */
 function QueryParamsWithNavigateExample() {
-  // 현재 URL 정보를 가져오기 위한 useLocation
+  // 현재 URL 정보를 받아오기 위한 useLocation
   const location = useLocation();
   // URL 업데이트를 위한 useNavigate
   const navigate = useNavigate();
 
-  // URLSearchParams를 사용해서 현재 쿼리 스트링을 파싱
+  // URLSearchParams를 통해 쿼리 문자열을 파싱
   const searchParams = new URLSearchParams(location.search);
+  // 파라미터 읽기: category와 sort (없으면 'none'으로 출력)
   const category = searchParams.get('category') || 'none';
   const sort = searchParams.get('sort') || 'none';
 
   const handleUpdateParams = () => {
-    // 기존 파라미터 복사 후, 새로운 값으로 업데이트
+    // 기존 쿼리 파라미터들을 복사하여 새로운 URLSearchParams 객체 생성
     const newParams = new URLSearchParams(location.search);
-    // TODO: 학생들이 아래 값을 원하는 값으로 수정해보세요.
     
-    // URL 경로와 함께 새로운 쿼리 스트링으로 업데이트
+    // [실습] 아래 값을 원하는 값으로 수정해보세요.
+    // 예시: category 값을 'books'로, sort 값을 'desc'로 업데이트
+    newParams.set('category', 'books');
+    newParams.set('sort', 'desc');
+    
+    // 업데이트된 쿼리 문자열로 현재 경로를 변경 (SPA 방식, 전체 리로드 X)
     navigate(`${location.pathname}?${newParams.toString()}`);
   };
 
@@ -123,6 +120,38 @@ function QueryParamsWithNavigateExample() {
   );
 }
 
+/* ---------------------------------------------------------
+   Home 컴포넌트 (내비게이션 링크 제공)
+--------------------------------------------------------- */
+function Home() {
+  return (
+    <div>
+      <h1>React Router &amp; window.location 활용 예제</h1>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/searchparams?name=John">useSearchParams Example</Link>
+          </li>
+          <li>
+            <Link to="/windowlocation?id=123&ref=example">window.location Example</Link>
+          </li>
+          <li>
+            <Link to="/navigate-example?category=all&sort=asc">
+              QueryParamsWithNavigateExample
+            </Link>
+          </li>
+        </ul>
+      </nav>
+      <p>
+        이 예제들은 React Router의 다양한 훅들을 사용하여 URL 쿼리 파라미터를 읽고, 업데이트하는 방법을 보여줍니다.
+      </p>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------
+   전체 애플리케이션 구성 컴포넌트 (라우팅)
+--------------------------------------------------------- */
 function App() {
   return (
     <BrowserRouter>
